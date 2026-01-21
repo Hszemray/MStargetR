@@ -106,7 +106,7 @@
 qcCheckR <- function(user_name,
                      project_directory,
                      mrm_template_list = NULL,
-                     QC_sample_label = "LTR",
+                     QC_sample_label,
                      sample_tags = NULL,
                      mv_threshold = 50) {
   #validate user_name

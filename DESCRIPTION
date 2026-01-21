@@ -67,6 +67,7 @@ Imports:
     plotly,
     purrr,
     readr,
+    reticulate,
     ropls,
     rstudioapi,
     statTarget,

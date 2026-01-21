@@ -41,7 +41,7 @@ MetaboExploreR::qcCheckR(
               conc_guide = "path/to/SIL_concentration_guide1.tsv")
              ),
   QC_sample_label = "qc",
-  sample_tags = c("sample", "control", "blank", "qc"),
+  sample_tags = c("sample", "control", "blank", "qc"), # replace with your sample tags
   mv_threshold = 50 #default is 50% missing values
 )
 

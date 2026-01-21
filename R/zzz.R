@@ -136,3 +136,20 @@ utils::globalVariables(
   }
 }
 
+
+#openms---
+.openms_state <- new.env(parent = emptyenv())
+.openms_state$om <- NULL
+.openms_state$configured <- FALSE
+
+.onLoad <- function(libname, pkgname) {
+  if (!requireNamespace("reticulate", quietly = TRUE)) return(invisible())
+
+  # Package-best practice: declare Python deps so reticulate can provision them.
+  reticulate::py_require("numpy")
+  reticulate::py_require("pyopenms")
+
+  .openms_state$configured <- TRUE
+  invisible(TRUE)
+}
+

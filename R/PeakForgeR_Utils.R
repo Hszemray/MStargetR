@@ -892,8 +892,41 @@ peak_picking <- function(plateID, master_list) {
   versions <- names(master_list$templates$mrm_guides)
   versions <- setdiff(versions, "by_plate")
 
-  if(master_list$project_details$user_name == "ANPC"){
-  likely_version <- version_selector(master_list)
+  #mrm_template selection
+  if(length(master_list$templates$mrm_guides) > 1){
+    ## Find all mzML files
+    mzml_files <- list.files(
+      path = master_list$project_details$project_dir,
+      pattern = "\\.mzML$",
+      recursive = TRUE,
+      full.names = TRUE
+    )
+    ##filter for plate
+    filtered_mzml <- mzml_files[grepl(master_list$project_details$plateID, mzml_files)]
+    if (length(filtered_mzml) == 0) {
+      stop("Error: No mzML files found in the specified directory.")
+    }
+    first_mzml <- filtered_mzml[1]
+
+    ## Extract all templates except "by_plate"
+    all_templates <- master_list$templates$mrm_guides
+    all_templates <- all_templates[!names(all_templates) %in% "by_plate"]
+    templates <- lapply(all_templates, function(x) x$mrm_guide)
+
+    ## Run the matching function
+    result <- match_templates_to_mzml(
+      mrm_templates = templates,
+      mzml_file = first_mzml,
+      precursor_col = "Precursor Mz",
+      product_col   = "Product Mz",
+      name_col      = "Precursor Name",
+      standardize   = TRUE,
+      verbose       = TRUE
+    )
+
+    master_list$project_details$is_ver <- result$best_match_name
+
+    likely_version <- result$best_match_name
     if (!is.na(likely_version) && likely_version %in% versions) {
       versions <- c(likely_version, setdiff(versions, likely_version))
     }
@@ -999,43 +1032,6 @@ peak_picking <- function(plateID, master_list) {
 
 
 ###Sub Functions----
-
-#' version_selector
-#'
-#' ANPC specific helper function to reorder first version tried based on jwist naming conventions.
-#' @keywords internal
-#' @param master_list A list containing project details and data.
-#' @return Updated version list with the most probabilistic version first.
-#' @examples
-#' \dontrun{
-#' version_selector(master_list)
-#' }
-version_selector <- function(master_list) {
-
-  # Extract version from plateID
-  plate_id <- master_list$project_details$plateID
-  plate_indicated_version <- unique(stringr::str_extract(plate_id, "_MS-LIPIDS(?:-[2-4])?"))
-
-  # Define convention key as a named list
-  convention_key <- list(
-    "_MS-LIPIDS"  = "LGW_lipid_mrm_template_v1.tsv",
-    "_MS-LIPIDS-2" = "LGW_lipid_mrm_template_v2.tsv",
-    "_MS-LIPIDS-3" = "LGW_lipid_mrm_template_v2.tsv",
-    "_MS-LIPIDS-4" = "LGW_lipid_mrm_template_v4.tsv"
-  )
-
-  matching_version <- convention_key[[plate_indicated_version]]
-
-  if (is.null(matching_version)) {
-    message("Well well well... plateID: ", plate_id,
-            "\nNo method version tag... Excellent! This is on you...\n",
-            "Now lets try all the versions. Slowly. Painfully. Like watching paint dry.")
-    return(NA)
-  }
-
-  return(matching_version)
-}
-
 
 #' create_summary_table
 #'

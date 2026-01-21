@@ -11,7 +11,7 @@
 #' @importFrom ggplot2 ggplot aes theme element_text labs geom_vline geom_hline geom_point theme_bw scale_shape_manual scale_color_manual scale_size_manual guides guide_legend facet_wrap scale_fill_manual ylab geom_text
 #' @importFrom tibble tibble add_column as_tibble is_tibble column_to_rownames rownames_to_column
 #' @importFrom tidyr replace_na pivot_wider
-#' @importFrom stringr str_extract str_detect
+#' @importFrom stringr str_extract str_detect str_remove_all
 #' @importFrom magrittr %>%
 #' @importFrom stats median setNames na.omit sd
 #' @importFrom data.table :=
@@ -250,6 +250,136 @@ qcCheckR_setup_project_directories <- function(master_list) {
   }
 }
 
+
+#' Reformat Report Data
+#'
+#' This function reformats a report object by extracting precursor and product m/z values,
+#' cleaning molecule names, and returning a tidy tibble with relevant information.
+#'
+#' @keywords internal
+#' @param report A list or data frame containing report details. Must include fields:
+#'   `id`, `name`, `rt`, `from`, `to`, `integral`, `intensity`, and `timestamp`.
+#' @return A tibble with columns:
+#'   `FileName`, `MoleculeListName`, `MoleculeName`, `PrecursorMz`, `ProductMz`,
+#'   `RetentionTime`, `StartTime`, `EndTime`, `Area`, `Height`, and `AcquiredTime`.
+#' @examples
+#' \dontrun{
+#' formatted_report <- reformat_report(report)
+#' head(formatted_report)
+#' }
+reformat_report <- function(master_list,report) {
+
+  # Extract m/z from report$id
+  PrecursorMz <- as.numeric(stringr::str_remove(stringr::str_extract(report$id, "Q1=\\d+\\.\\d+"), "Q1="))
+  ProductMz   <- as.numeric(stringr::str_remove(stringr::str_extract(report$id, "Q3=\\d+\\.\\d+"), "Q3="))
+
+  MoleculeName <- stringr::str_extract(report$id, "(?<=\\bname=)[^&]+")
+  MoleculeName <- stringr::str_replace_all(MoleculeName, "name=", "")
+
+  reformated_report <- tibble::tibble(
+    FileName         = report$name,
+    MoleculeListName = MoleculeName,
+    MoleculeName     = MoleculeName,
+    PrecursorMz      = PrecursorMz,
+    ProductMz        = ProductMz,
+    RetentionTime    = report$rt,
+    StartTime        = report$from,
+    EndTime          = report$to,
+    Area             = report$integral,
+    Height           = report$intensity,
+    AcquiredTime     = report$timestamp
+  )
+
+  # Extract unique m/z pairs
+  mz_pairs <- reformated_report %>%
+    dplyr::select(PrecursorMz, ProductMz) %>%
+    dplyr::distinct() %>%
+    dplyr::rename(`Precursor Mz` = PrecursorMz, `Product Mz` = ProductMz)
+
+  # Determine best SIL guide
+  sil_guides_list <- master_list$templates$mrm_guides
+  match_stats <- purrr::map_df(names(sil_guides_list), function(guide_name) {
+    guide <- sil_guides_list[[guide_name]]$SIL_guide
+    matches <- mz_pairs %>%
+      dplyr::inner_join(guide, by = c("Precursor Mz", "Product Mz"))
+    tibble::tibble(
+      guide = guide_name,
+      match_count = nrow(matches),
+      total_pairs = nrow(mz_pairs),
+      match_pct = (nrow(matches) / nrow(mz_pairs)) * 100
+    )
+  })
+
+  sorted_stats <- match_stats %>%
+    dplyr::arrange(dplyr::desc(match_pct))
+
+  if (nrow(sorted_stats) >= 2 &&
+      sorted_stats$match_pct[1] == sorted_stats$match_pct[2] &&
+      all(c("v2", "v3") %in% sorted_stats$guide[1:2])) {
+    best_guide_name <- "v2"
+  } else {
+    best_guide_name <- sorted_stats$guide[1]
+  }
+
+  best_guide <- sil_guides_list[[best_guide_name]]$SIL_guide
+
+  # Match with best guide
+  matched_pairs <- mz_pairs %>%
+    dplyr::inner_join(best_guide, by = c("Precursor Mz", "Product Mz")) %>%
+    dplyr::select(
+      `Precursor Mz`,
+      `Product Mz`,
+      MoleculeListName = `Molecule List Name`,
+      MoleculeName     = `Precursor Name`
+    ) %>%
+    dplyr::distinct(`Precursor Mz`, `Product Mz`, .keep_all = TRUE) %>%
+    dplyr::rename(
+      PrecursorMz = `Precursor Mz`,
+      ProductMz   = `Product Mz`
+    )
+
+  # Join back and reorder
+  reformated_report <- reformated_report %>%
+    dplyr::left_join(matched_pairs, by = c("PrecursorMz", "ProductMz")) %>%
+    dplyr::mutate(
+      MoleculeListName = dplyr::coalesce(MoleculeListName.y, MoleculeListName.x),
+      MoleculeName     = dplyr::coalesce(MoleculeName.y, MoleculeName.x)
+    ) %>%
+    dplyr::select(-dplyr::matches("\\.x$|\\.y$")) %>%
+    dplyr::relocate(MoleculeListName, MoleculeName, .after = FileName)%>%
+    dplyr::filter(
+      !is.na(MoleculeListName),
+      !is.na(MoleculeName),
+      !is.na(PrecursorMz),
+      !is.na(ProductMz)
+    )
+
+  if(master_list$project_details$user_name == "ANPC"){
+  reformated_report$MoleculeName <- stringr::str_replace_all(reformated_report$MoleculeName, c(
+    "name=" = "",
+    "\\+H" = "",
+    "\\+NH4" = "",
+    "\\-H" = "",
+    "\\+AcO" = "",
+    "/" = "_",
+    ".IS" = "",
+    "\\)d" = ")_d"
+  ))
+
+  reformated_report$MoleculeName <- ifelse(
+    grepl("_Lipidyzer|_SPLASH|_Lyso", reformated_report$MoleculeName) & !grepl("^SIL_", reformated_report$MoleculeName),
+    paste0("SIL_", reformated_report$MoleculeName),
+    reformated_report$MoleculeName
+  )
+  # Fix missing underscore before label suffix
+  reformated_report$MoleculeName <- sub("(\\))(d[579]_Lipidyzer|d7_SPLASH|d5_Lipidyzer|d7_Lyso)", "\\1_\\2", reformated_report$MoleculeName)
+  reformated_report$MoleculeName <- stringr::str_remove_all(reformated_report$MoleculeName, "\\.IS")
+  }
+
+  return(reformated_report)
+}
+
+
 #' qcCheckR_import_PeakForgeR_reports
 #'
 #' This function imports PeakForgeR reports from the project directory and stores them in the master list.
@@ -314,13 +444,20 @@ qcCheckR_import_PeakForgeR_reports <- function(master_list) {
     colnames(PeakForgeR_report) <- gsub("\\.", "", colnames(PeakForgeR_report))
     colnames(PeakForgeR_report) <- gsub(" ", "", colnames(PeakForgeR_report))
 
+    #reformat if PeakforgeR method was msut
+    if (identical(colnames(PeakForgeR_report),
+                  c("name","plate","index","id","ort","rt","from","to","intensity","integral","total_area","timestamp"))) {
+      PeakForgeR_report <- reformat_report(master_list, PeakForgeR_report)
+    }
+
     PeakForgeR_report <- PeakForgeR_report[!is.na(PeakForgeR_report$FileName), ]
     PeakForgeR_report <- PeakForgeR_report[PeakForgeR_report$Area != 0 &
                                              PeakForgeR_report$Height != 0, ]
     PeakForgeR_report <- PeakForgeR_report[!apply(is.na(PeakForgeR_report), 1, all), ]
     PeakForgeR_report <- PeakForgeR_report[
-      !grepl("(?i)\\bCOND\\b|\\bBLANK\\b|\\bISTDs\\b", PeakForgeR_report$FileName, perl = TRUE),
+      !grepl("(?i)COND|BLANK|ISTDs", PeakForgeR_report$FileName, perl = TRUE),
     ]
+
     master_list$data$PeakForgeRReport[[file_name]] <- PeakForgeR_report
     master_list$project_details$plateIDs <- c(master_list$project_details$plateIDs, file_name)
   }
@@ -762,16 +899,18 @@ set_project_qc_type <- function(master_list) {
 #' @keywords internal
 #' @param master_list A list containing project details and sorted peak area data.
 #' @return The updated master list with finalised sorted data.
+
 finalise_sorted_data <- function(master_list) {
+  # Step 1: Process each plate
   for (plate_id in names(master_list$data$peakArea$sorted)) {
     sorted <- master_list$data$peakArea$sorted[[plate_id]]
     qc_type <- master_list$project_details$qc_type
+    factor_levels <- unique(c("sample", qc_type, master_list$project_details$sample_tags))
 
+    # Add factors and relocate columns
     sorted <- sorted %>%
       dplyr::mutate(
-        sample_type_factor = factor(sample_type, levels = unique(
-          c("sample", qc_type, "ltr", "pqc", "vltr", "sltr")
-        ), ordered = TRUE),
+        sample_type_factor = factor(sample_type, levels = factor_levels, ordered = TRUE),
         sample_type_factor_rev = factor(
           sample_type_factor,
           levels = rev(levels(sample_type_factor)),
@@ -781,37 +920,58 @@ finalise_sorted_data <- function(master_list) {
         sample_data_source = ".peakArea"
       ) %>%
       dplyr::relocate(sample_type_factor,
-               sample_type_factor_rev,
-               sample_data_source,
-               .after = sample_type)
-
+                      sample_type_factor_rev,
+                      sample_data_source,
+                      .after = sample_type)
 
     master_list$data$peakArea$sorted[[plate_id]] <- sorted
   }
 
+  # Step 2: Combine all plates and add run index
   all_samples <- dplyr::bind_rows(master_list$data$peakArea$sorted) %>%
     dplyr::arrange(sample_timestamp) %>%
     dplyr::mutate(sample_run_index = dplyr::row_number()) %>%
     dplyr::relocate(sample_run_index, .before = sample_name)
 
+  # Split back by plate
   master_list$data$peakArea$sorted <- split(all_samples, all_samples$sample_plate_id)
 
-
+  # Step 3: Remove columns that are all NA (except sample columns)
   master_list$data$peakArea$sorted <- lapply(
     master_list$data$peakArea$sorted,
     function(df) {
-      df %>% dplyr::select(
-        which(
-          !sapply(df, function(col) all(is.na(col))) | grepl("sample", names(df))
-        )
+      df <- df %>% dplyr::select(
+        which(!sapply(df, function(col) all(is.na(col))) | grepl("^sample", names(df)))
       )
+
+      #Step 4: Sort columns alphabetically, keeping sample_* first,
+      # and lipid classes grouped alphabetically with numeric sorting
+      all_cols <- colnames(df)
+      sample_cols <- grep("^sample", all_cols, value = TRUE)
+      other_cols <- setdiff(all_cols, sample_cols)
+
+      # Custom sorting function
+      sort_grouped_cols <- function(cols) {
+        lipid_class <- stringr::str_extract(cols, "^[A-Za-z]+")
+        nums_list <- stringr::str_extract_all(cols, "\\d+")
+        max_len <- max(lengths(nums_list))
+        nums_matrix <- t(sapply(nums_list, function(x) {
+          c(as.numeric(x), rep(NA, max_len - length(x)))
+        }))
+        order_index <- do.call(order, c(list(lipid_class), as.data.frame(nums_matrix)))
+        cols[order_index]
+      }
+
+      sorted_cols <- c(sample_cols, sort_grouped_cols(other_cols))
+      df <- df[, sorted_cols]
+
+      return(df)
     }
   )
 
-
-
   return(master_list)
 }
+
 
 #.----
 ##Impute Missing Data ----

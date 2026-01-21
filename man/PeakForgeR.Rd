@@ -9,7 +9,8 @@ PeakForgeR(
   project_directory,
   mrm_template_list = NULL,
   QC_sample_label = NULL,
-  plateID_outputs = NULL
+  plateID_outputs = NULL,
+  method = c("skyline", "openms", "anpc")
 )
 }
 \arguments{
@@ -45,6 +46,13 @@ An appropriate input would be:
 \item plateID_outputs = c("JANE_DOE_C5_URI_MS-LIPIDS_PLATE_1",
 "JANE_DOE_C5_URI_MS-LIPIDS_PLATE_2")
 }}
+
+\item{method}{Allows user to select the peak picking method to use.
+e.g. "skyline", "anpc", or "openms"
+NOTE IF USING "openms" please install conda using the following method below"
+one-time per machine
+run "peakforger_setup_openms(envname="r-openms-env", python_version="3.10", backend="conda", install=TRUE)"
+restart R session and then run the pipeline}
 }
 \value{
 A curated project directory with sub folders for each plate containing Skyline exports.

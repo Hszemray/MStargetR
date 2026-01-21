@@ -46,23 +46,41 @@ compute_results_anpc <- function(plateIDs, user_name, project_directory, mrm_tem
     master_list <- import_mzml(plateID, master_list)
     write_log("mzML import complete.")
 
-    # version supply for msut
-    if (master_list$project_details$user_name == "ANPC"){
+    ##mrm_template version selection
+    if(length(master_list$templates$mrm_guides) > 1){
+      ## Find all mzML files
+      mzml_files <- list.files(
+        path = master_list$project_details$project_dir,
+        pattern = "\\.mzML$",
+        recursive = TRUE,
+        full.names = TRUE
+      )
+      ##filter for plate
+      filtered_mzml <- mzml_files[grepl(master_list$project_details$plateID, mzml_files)]
+      if (length(filtered_mzml) == 0) {
+        stop("Error: No mzML files found in the specified directory.")
+      }
+      first_mzml <- filtered_mzml[1]
 
-      plate_id <- master_list$project_details$plateID
-      plate_indicated_version <- unique(stringr::str_extract(plate_id, "_MS-LIPIDS(?:-[2-4])?"))
+      ## Extract all templates except "by_plate"
+      all_templates <- master_list$templates$mrm_guides
+      all_templates <- all_templates[!names(all_templates) %in% "by_plate"]
+      templates <- lapply(all_templates, function(x) x$mrm_guide)
 
-      convention_key <- list(
-        "_MS-LIPIDS"  = "LGW_lipid_mrm_template_v1.tsv",
-        "_MS-LIPIDS-2" = "LGW_lipid_mrm_template_v2.tsv",
-        "_MS-LIPIDS-3" = "LGW_lipid_mrm_template_v2.tsv",
-        "_MS-LIPIDS-4" = "LGW_lipid_mrm_template_v4.tsv"
+      ## Run the matching function
+      result <- match_templates_to_mzml(
+        mrm_templates = templates,
+        mzml_file = first_mzml,
+        precursor_col = "Precursor Mz",
+        product_col   = "Product Mz",
+        name_col      = "Precursor Name",
+        standardize   = TRUE,
+        verbose       = TRUE
       )
 
-      master_list$project_details$is_ver <- convention_key[[plate_indicated_version]]
-    }else{
-     master_list$project_details$is_ver <- names(master_list$templates$mrm_guides)[1]
+      master_list$project_details$is_ver <- result$best_match_name
     }
+
     message(paste("Using method template: ",master_list$project_details$is_ver))
     write_log(paste("Using method template: ",master_list$project_details$is_ver))
 
@@ -235,6 +253,13 @@ compute_results_skyline <- function(plateIDs, user_name, project_directory, mrm_
 #' An appropriate input would be:
 #'  - plateID_outputs = c("JANE_DOE_C5_URI_MS-LIPIDS_PLATE_1",
 #'                        "JANE_DOE_C5_URI_MS-LIPIDS_PLATE_2")
+#' @param method Allows user to select the peak picking method to use.
+#' e.g. "skyline", "anpc", or "openms"
+#' NOTE IF USING "openms" please install conda using the following method below"
+#'  one-time per machine
+#'  run "peakforger_setup_openms(envname="r-openms-env", python_version="3.10", backend="conda", install=TRUE)"
+#'  restart R session and then run the pipeline
+
 #' @return A curated project directory with sub folders for each plate containing Skyline exports.
 #' @examples
 #' \dontrun{
@@ -289,7 +314,7 @@ PeakForgeR <- function(user_name,
                        mrm_template_list = NULL,
                        QC_sample_label = NULL,
                        plateID_outputs = NULL,
-                       method = c("skyline", "anpc")) {
+                       method = c("skyline","openms", "anpc")) {
   method <- match.arg(method)
   #Validate user
   if (!is.character(user_name) || nchar(user_name) == 0) {
@@ -380,7 +405,10 @@ PeakForgeR <- function(user_name,
     results <- compute_results_skyline(plateIDs, user_name, project_directory, mrm_template_list, QC_sample_label)
   } else if (method == "anpc") {
     results <- compute_results_anpc(plateIDs, user_name, project_directory, mrm_template_list, QC_sample_label)
-  } else {
+  } else if (method == "openms") {
+    openms_use_backend("conda", envname = "r-openms-env")
+    results <- compute_results_openms(plateIDs, user_name, project_directory, mrm_template_list, QC_sample_label, template_vote_n_files = 1L, cfg = PF_CFG)
+  }else {
     stop("Choose one of the valid processing methods")
   }
 

@@ -14,24 +14,25 @@ output:
 start_time <- Sys.time()
 
 # User parameters:
-project_path <- "C:/Users/Hszem/OneDrive - Murdoch University/Desktop/cardio_SGLT2-murine_MPA_MS-LIPIDS-4@fEPP_CDOr14_CDOp027" # Please define path to project file
+project_path <- "C:/Users/Hszem/OneDrive - Murdoch University/Desktop/integration_test_msut" # Please define path to project file
 qc_label <- "PQC"   # Options: LTR, PQC, VLTR, etc.
 missing_val_threshold <- 50 #default for ANPC methods
 
-# message("Step 1: Converting raw vendor files to mzml...")
-# MetaboExploreR::msConvertR(
-#   input_directory  = project_path,
-#   output_directory = project_path
-# )
+message("Step 1: Converting raw vendor files to mzml...")
+ MetaboExploreR::msConvertR(
+  input_directory  = project_path,
+  output_directory = project_path
+ )
 
-# message("Step 2: Running PeakForgeR...")
-# MetaboExploreR::PeakForgeR(
-#   user_name = "ANPC",
-#   project_directory = project_path,
-#   mrm_template_list = NULL,
-#   QC_sample_label = qc_label,
-#   plateID_outputs = NULL
-# )
+ message("Step 2: Running PeakForgeR...")
+ MetaboExploreR::PeakForgeR(
+   user_name = "ANPC",
+   project_directory = project_path,
+   mrm_template_list = NULL,
+   QC_sample_label = qc_label,
+   plateID_outputs = NULL, 
+   method  = "anpc"
+ )
 
 message("Step 3: Running QC check...")
 MetaboExploreR::qcCheckR(
@@ -52,10 +53,10 @@ sessionInfo()
 ```{r multiproject workflow, include = FALSE}
 # Define a list of project configurations
 project_configs <- list(
- #list(path = "C:/Users/Hszem/OneDrive - Murdoch University/Desktop/methodComparison/mauritius_C2_skyline", qc_label = "PQC", missing_val_threshold = 50),
- #list(path = "C:/Users/Hszem/OneDrive - Murdoch University/Desktop/methodComparison/mums_C1_skyline", qc_label = "PQC", missing_val_threshold = 50),
-  #list(path = "C:/Users/Hszem/OneDrive - Murdoch University/Desktop/methodComparison/performance_smp1_skyline", qc_label = "PQC", missing_val_threshold = 50), 
-  #list(path = "C:/Users/Hszem/OneDrive - Murdoch University/Desktop/v2_LTR_mock", qc_label = "PQC", missing_val_threshold = 50)
+ list(path = "C:/Users/Hszem/OneDrive - Murdoch University/Desktop/methodComparison/mauritius_C2_skyline", qc_label = "PQC", missing_val_threshold = 50),
+ list(path = "C:/Users/Hszem/OneDrive - Murdoch University/Desktop/methodComparison/mums_C1_skyline", qc_label = "PQC", missing_val_threshold = 50),
+ list(path = "C:/Users/Hszem/OneDrive - Murdoch University/Desktop/methodComparison/performance_smp1_skyline", qc_label = "PQC", missing_val_threshold = 50),
+ list(path = "C:/Users/Hszem/OneDrive - Murdoch University/Desktop/v2_LTR_mock", qc_label = "PQC", missing_val_threshold = 50)
 )
 
 #Loop through configs
@@ -65,10 +66,10 @@ for (config in project_configs) {
   missing_val_threshold <- config$missing_val_threshold
 
   # message("Step 1: Converting raw vendor files to mzml...")
-  # MetaboExploreR::msConvertR(
-  #   input_directory  = project_path,
-  #   output_directory = project_path
-  # )
+  MetaboExploreR::msConvertR(
+    input_directory  = project_path,
+    output_directory = project_path
+  )
 
   # message("Step 2: Running PeakForgeR...")
   MetaboExploreR::PeakForgeR(
