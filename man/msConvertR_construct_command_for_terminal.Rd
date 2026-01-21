@@ -2,14 +2,20 @@
 % Please edit documentation in R/msConvertR_Utils.R
 \name{msConvertR_construct_command_for_terminal}
 \alias{msConvertR_construct_command_for_terminal}
-\title{msConvertR_construct_command_for_terminal}
+\title{msConvertR_construct_commands_for_terminal}
 \usage{
-msConvertR_construct_command_for_terminal(input_directory, output_directory)
+msConvertR_construct_command_for_terminal(
+  input_directory,
+  output_directory,
+  plateIDs
+)
 }
 \arguments{
 \item{input_directory}{path to input directory containing vendor files}
 
 \item{output_directory}{path to output directory.}
+
+\item{plateIDs}{The names of vendor files to convert}
 }
 \value{
 The constructed command string.

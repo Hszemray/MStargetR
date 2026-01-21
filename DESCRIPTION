@@ -1,5 +1,5 @@
-Package: MetaboExploreR
-Title: MetaboExploreR
+Package: MStargetR
+Title: MStargetR
 Version: 1.0.0
 Description: An R package to explore targeted MRM mass spectrometry data.
 Keywords:
@@ -9,8 +9,8 @@ Keywords:
     quality control
     software package
 Type: Package
-URL: https://github.com/Hszemray/MetaboExploreR#readme, https://github.com/Hszemray/MetaboExploreR
-BugReports: https://github.com/Hszemray/MetaboExploreR/issues
+URL: https://github.com/Hszemray/MStargetR#readme, https://github.com/Hszemray/MStargetR
+BugReports: https://github.com/Hszemray/MStargetR/issues
 License: MIT + file LICENSE
 Authors@R: c(
     person(

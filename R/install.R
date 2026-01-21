@@ -5,17 +5,17 @@
 #' @importFrom utils install.packages update.packages
 NULL
 
-#' install_MetaboExploreR
+#' install_MStargetR
 #'
-#' @description Helper function to install MetaboExplorer. Ensuring all packages
+#' @description Helper function to install MStargetR. Ensuring all packages
 #' are installed and up to date.
 #'
 #' @export
 #' @examples
 #' \dontrun{
-#' install_MetaboExploreR()
+#' install_MStargetR()
 #'}
-install_MetaboExploreR <- function() {
+install_MStargetR <- function() {
   if (!base::requireNamespace("BiocManager", quietly = TRUE))
     install.packages("BiocManager")
 
@@ -26,5 +26,5 @@ install_MetaboExploreR <- function() {
 
   update.packages(ask = FALSE)
 
-  BiocManager::install("Hszemray/MetaboExplorer")
+  BiocManager::install("Hszemray/MStargetR")
 }

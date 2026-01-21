@@ -4,7 +4,7 @@
 \alias{log_error}
 \title{Log Error to File}
 \usage{
-log_error(error_message)
+log_error(error_message, plateID)
 }
 \arguments{
 \item{error_message}{A character string representing the error message to be logged.}

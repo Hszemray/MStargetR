@@ -186,7 +186,7 @@ msConvertR_construct_command_for_terminal <- function(input_directory, output_di
 msConvertR_execute_command <- function(commands, output_directory, plateIDs) {
   message("Converting vendor files:\n", paste(plateIDs,collapse = "\n"))
 
-  logs_dir <- file.path(output_directory, "MetaboExploreR_logs")
+  logs_dir <- file.path(output_directory, "MStargetR_logs")
   dir.create(logs_dir, showWarnings = FALSE, recursive = TRUE)
 
   future::plan(future::multisession)
@@ -200,7 +200,7 @@ msConvertR_execute_command <- function(commands, output_directory, plateIDs) {
     future::future({
       plateID <- plateIDs[i]
       cmd <- commands[[i]]
-      log_file <- file.path(logs_dir, paste0(plateID, "_MetaboExploreR_log.txt"))
+      log_file <- file.path(logs_dir, paste0(plateID, "_MStargetR_log.txt"))
 
       start_time <- Sys.time()
 

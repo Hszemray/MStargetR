@@ -1,4 +1,4 @@
-MetaboExploreR
+MStargetR
 <img src='man/figures/logo.png' style='float: right; height:50px;' />
 ================
 
@@ -8,7 +8,7 @@ MetaboExploreR
 
 ## Overview
 
-MetaboExploreR provides a pipeline for processing and quality control of
+MStargetR provides a pipeline for processing and quality control of
 targeted mass spectrometry vendor files to concentration outputs ready
 for further analysis. The package allows for cross platform usage
 through Docker.
@@ -31,22 +31,22 @@ correction, and generates analytical reports.
 ## Installation
 
 **`Docker Desktop`** Users are required to install Docker in order to
-run MetaboExploreR::msConvertR and MetaboExploreR::PeakForgeR.  
+run MStargetR::msConvertR and MStargetR::PeakForgeR.  
 Please visit <https://www.docker.com/get-started/> for installation
 process.
 
 Note: Please ensure Docker Application is running in the background when
-using MetaboExploreR if you are using a Mac or Windows OS.
+using MStargetR if you are using a Mac or Windows OS.
 
-**`MetaboExploreR`** Installation is effortless with the below helper
+**`MStargetR`** Installation is effortless with the below helper
 function. Once the package is attached you will be asked for a username
 and a default default workflow will open for your convenience.
 
 ``` r
-source("https://raw.githubusercontent.com/Hszemray/MetaboExploreR/master/R/install.R")
-install_MetaboExploreR()
-rm(install_MetaboExploreR)
-library(MetaboExploreR)
+source("https://raw.githubusercontent.com/Hszemray/MStargetR/master/R/install.R")
+install_MStargetR()
+rm(install_MStargetR)
+library(MStargetR)
 ```
 
 ## Project Setup
@@ -95,7 +95,7 @@ Process iterates by plate to:
 Post-execution directory of msConvertR, PeakForgeR, and qcCheckR:
 
     User Project Directory
-    ├── Archive #Archive of wiff files and MetaboExploreR logs by plate
+    ├── Archive #Archive of wiff files and MStargetR logs by plate
     ├── ALL
     │   ├── data
     │   │   ├── batch_correction # batch  and singnal drift correction outputs
@@ -112,7 +112,7 @@ Post-execution directory of msConvertR, PeakForgeR, and qcCheckR:
 ## User Guide
 
 For a more detailed guide please visit the following link
-[here](https://Hszemray.github.io/MetaboExploreR/MetaboExploreR-vignette.html)
+[here](https://Hszemray.github.io/MStargetR/MStargetR-vignette.html)
 
 ## Technical Notes
 
@@ -132,7 +132,7 @@ For a more detailed guide please visit the following link
 ## Support
 
 For technical assistance, please open an issue at:  
-<https://github.com/Hszemray/MetaboExploreR>
+<https://github.com/Hszemray/MStargetR>
 
 ## License
 
@@ -144,7 +144,7 @@ If you use this software in your work, please cite it using the
 following metadata:
 
 Szemray, H., Nambiar, V., Lawler, N., Lodge, S., Wist, J.,& Whiley, L.
-(2025). MetaboExploreR (Version 1.0.0) \[Computer software\].
+(2025). MStargetR (Version 1.0.0) \[Computer software\].
 Zenodo.(zenodo link)
 
 <!-- Links -->

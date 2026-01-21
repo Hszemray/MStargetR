@@ -4,9 +4,9 @@
 #' in a Docker image. Allowing for usage across all major OS systems.
 #'
 #' We strongly recommend checking your mrm transition list
-#' using MetaboExploreR::TransitionCheckR prior to using it in PeakForgeR
+#' using MStargetR::TransitionCheckR prior to using it in PeakForgeR
 #'
-#' If the user has not used MetaboExploreR::msConvertR to convert vendor files
+#' If the user has not used MStargetR::msConvertR to convert vendor files
 #' please ensure you create a project folder containing sub folder
 #' "msConvert_mzml_output" with mzml files for the project.
 #' @param user_name A character string to identify user.
@@ -23,7 +23,7 @@
 #' QC_sample_label = "LTR" to target files containing LTR for QC.
 #' @param plateID_outputs A vector of character strings specifying plateIDs for
 #' project. This parameter must only be specified by users who have not used
-#' MetaboExploreR::msConvertR..... Default is NULL
+#' MStargetR::msConvertR..... Default is NULL
 #'
 #' These must match mzml files.
 #' e.g. If you have two plates:
@@ -38,7 +38,7 @@
 #' @examples
 #' \dontrun{
 #' #Load example mrm_guide
-#'   file_path <- system.file("extdata", "LGW_lipid_mrm_template_v1.tsv", package = "MetaboExploreR")
+#'   file_path <- system.file("extdata", "LGW_lipid_mrm_template_v1.tsv", package = "MStargetR")
 #'   example_mrm_template <- read_tsv(file_path)
 #'
 #' #Run PeakForgeR function
@@ -60,7 +60,7 @@
 #'   }
 #'  \item \strong{File Handling:}
 #'   \itemize{
-#'    \item Set plateIDs from either plate MetaboExploreR::msConvertR or
+#'    \item Set plateIDs from either plate MStargetR::msConvertR or
 #'          user specified plateID_outputs
 #'   }
 #'  \item \strong{Processing Plates:}
@@ -126,7 +126,7 @@ PeakForgeR <- function(user_name,
   # Set plateIDs
   file_paths <- list.files(project_directory)
   exclude_names <- c("raw_data", "msConvert_mzml_output", "all", "archive",
-                     "error_log.txt","MetaboExploreR_logs", "logs", "user_files")
+                     "error_log.txt","MStargetR_logs", "logs", "user_files")
   plateIDs <- file_paths[!basename(file_paths) %in% exclude_names]
 
 
@@ -183,7 +183,7 @@ PeakForgeR <- function(user_name,
   successful_plates <- c()
 
   # Process each plate in parallel
-  logs_dir <- file.path(project_directory, "MetaboExploreR_logs")
+  logs_dir <- file.path(project_directory, "MStargetR_logs")
   dir.create(logs_dir, showWarnings = FALSE, recursive = TRUE)
 
   #Parallel settings
@@ -195,8 +195,8 @@ PeakForgeR <- function(user_name,
 
   results <- future.apply::future_lapply(plateIDs, function(plateID) {
     start_time <- Sys.time()
-    log_file <- file.path(logs_dir, paste0(plateID, "_MetaboExploreR_log.txt"))
-    library(MetaboExploreR)
+    log_file <- file.path(logs_dir, paste0(plateID, "_MStargetR_log.txt"))
+    library(MStargetR)
 
     # Helper to write a line to the log
     write_log <- function(text) {

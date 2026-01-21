@@ -151,42 +151,42 @@ qcCheckR_read_mrm_guides <- function(master_list, mrm_template_list) {
     master_list$templates$mrm_guides <- list(
       v1 = list(
         SIL_guide  = read_and_clean_sil(
-          system.file("extdata", "LGW_lipid_mrm_template_v1.tsv", package = "MetaboExploreR")
+          system.file("extdata", "LGW_lipid_mrm_template_v1.tsv", package = "MStargetR")
         ),
         conc_guide = read_and_clean_conc(
-          system.file("extdata", "LGW_SIL_batch_103.tsv", package = "MetaboExploreR")
+          system.file("extdata", "LGW_SIL_batch_103.tsv", package = "MStargetR")
         )
       ),
       v2 = list(
         SIL_guide  = read_and_clean_sil(
-          system.file("extdata", "LGW_lipid_mrm_template_v2.tsv", package = "MetaboExploreR")
+          system.file("extdata", "LGW_lipid_mrm_template_v2.tsv", package = "MStargetR")
         ),
         conc_guide = read_and_clean_conc(
           system.file(
             "extdata",
             "LGW_SIL_batch_Ultimate_2023_03_06.tsv",
-            package = "MetaboExploreR"
+            package = "MStargetR"
           )
         )
       ),
       v3 = list(
         SIL_guide  = read_and_clean_sil(
-          system.file("extdata", "LGW_lipid_mrm_template_v3.tsv", package = "MetaboExploreR")
+          system.file("extdata", "LGW_lipid_mrm_template_v3.tsv", package = "MStargetR")
         ),
         conc_guide = read_and_clean_conc(
           system.file(
             "extdata",
             "LGW_SIL_batch_Ultimate_2023_03_06.tsv",
-            package = "MetaboExploreR"
+            package = "MStargetR"
           )
         )
       ),
       v4 = list(
         SIL_guide  = read_and_clean_sil(
-          system.file("extdata", "LGW_lipid_mrm_template_v4.tsv", package = "MetaboExploreR")
+          system.file("extdata", "LGW_lipid_mrm_template_v4.tsv", package = "MStargetR")
         ),
         conc_guide = read_and_clean_conc(
-          system.file("extdata", "v4_ISTD_conc_updated.tsv", package = "MetaboExploreR")
+          system.file("extdata", "v4_ISTD_conc_updated.tsv", package = "MStargetR")
         )
       )
     )
@@ -3106,7 +3106,7 @@ export_html_report <- function(master_list) {
 
   template_path <- system.file("templates",
                                "qcCheckR_report_template_HS_V1.Rmd",
-                               package = "MetaboExploreR")
+                               package = "MStargetR")
   template_content <- readLines(template_path)
 
 
@@ -3159,7 +3159,7 @@ export_master_list_rda <- function(master_list) {
     master_list,
     "data_exports",
     "plot_generation",
-    "Script Complete \n\n\n Thank you for choosing MetaboExploreR"
+    "Script Complete \n\n\n Thank you for choosing MStargetR"
   )
 
   return(master_list)

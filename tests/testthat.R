@@ -7,6 +7,6 @@
 # * https://testthat.r-lib.org/articles/special-files.html
 
 library(testthat)
-library(MetaboExploreR)
+library(MStargetR)
 
-test_check("MetaboExploreR")
+test_check("MStargetR")

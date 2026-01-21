@@ -14,7 +14,7 @@
 
 <meta name="date" content="2025-10-09" />
 
-<title>MetaboExploreR </title>
+<title>MStargetR </title>
 
 <script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
 // be compatible with the behavior of Pandoc < 2.8).
@@ -339,7 +339,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 
 
 
-<h1 class="title toc-ignore">MetaboExploreR
+<h1 class="title toc-ignore">MStargetR
 <img role="img" src="man/figures/logo.png" style="float: right; height:100px;" /></h1>
 <h4 class="author">Harrison_Szemray</h4>
 <h4 class="date">2025-10-09</h4>
@@ -348,7 +348,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 
 <div id="introduction" class="section level1">
 <h1>Introduction</h1>
-<p><code>MetaboExploreR</code> is an R package that provides a
+<p><code>MStargetR</code> is an R package that provides a
 streamlined workflow for the processing and quality control of targeted
 mass spectrometry data. It is designed to take raw vendor files and
 produce concentration values ready for statistical analysis. The package
@@ -368,20 +368,20 @@ using the sample data provided with the package.</p>
 </div>
 <div id="installation" class="section level1">
 <h1>Installation</h1>
-<p>Before installing <code>MetaboExploreR</code>, you need to have
+<p>Before installing <code>MStargetR</code>, you need to have
 Docker Desktop installed on your system. You can download it from the
 official Docker website: <a href="https://www.docker.com/get-started/" class="uri">https://www.docker.com/get-started/</a></p>
 <p>Once Docker is installed and running, you can install
-<code>MetaboExploreR</code> from GitHub using the following commands in
+<code>MStargetR</code> from GitHub using the following commands in
 R:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">source</span>(<span class="st">&quot;https://raw.githubusercontent.com/Hszemray/MetaboExploreR/master/R/install.R&quot;</span>)</span>
-<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a><span class="fu">install_MetaboExploreR</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">source</span>(<span class="st">&quot;https://raw.githubusercontent.com/Hszemray/MStargetR/master/R/install.R&quot;</span>)</span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a><span class="fu">install_MStargetR</span>()</span></code></pre></div>
 <p>After installation, load the package into your R session:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="fu">library</span>(MetaboExploreR)</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="fu">library</span>(MStargetR)</span></code></pre></div>
 </div>
 <div id="workflow" class="section level1">
 <h1>Workflow</h1>
-<p>The <code>MetaboExploreR</code> workflow consists of four main steps.
+<p>The <code>MStargetR</code> workflow consists of four main steps.
 We will use the example data included in the package to demonstrate the
 workflow.</p>
 <div id="project-setup" class="section level2">
@@ -425,7 +425,7 @@ list as input and produces a report with the integrated peak areas.</p>
 information about the molecules to be quantified. An example file,
 <code>LGW_lipid_mrm_template_v1.tsv</code>, is included in the package.
 Let’s inspect its contents.</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a>mrm_template_path <span class="ot">&lt;-</span> <span class="fu">system.file</span>(<span class="st">&quot;extdata&quot;</span>, <span class="st">&quot;LGW_lipid_mrm_template_v1.tsv&quot;</span>, <span class="at">package =</span> <span class="st">&quot;MetaboExploreR&quot;</span>)</span>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a>mrm_template_path <span class="ot">&lt;-</span> <span class="fu">system.file</span>(<span class="st">&quot;extdata&quot;</span>, <span class="st">&quot;LGW_lipid_mrm_template_v1.tsv&quot;</span>, <span class="at">package =</span> <span class="st">&quot;MStargetR&quot;</span>)</span>
 <span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a>mrm_template <span class="ot">&lt;-</span> <span class="fu">read.delim</span>(mrm_template_path)</span>
 <span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a><span class="fu">head</span>(mrm_template)</span>
 <span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a><span class="co">#&gt;   Molecule.List.Name Precursor.Name Precursor.Mz Precursor.Charge Product.Mz</span></span>
@@ -457,7 +457,7 @@ follows:</p>
 <span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a>project_directory <span class="ot">&lt;-</span> <span class="st">&quot;path/to/your/project&quot;</span></span>
 <span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a></span>
 <span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a><span class="co"># List of MRM template files</span></span>
-<span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a>mrm_template_list <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="fu">system.file</span>(<span class="st">&quot;extdata&quot;</span>, <span class="st">&quot;LGW_lipid_mrm_template_v1.tsv&quot;</span>, <span class="at">package =</span> <span class="st">&quot;MetaboExploreR&quot;</span>))</span>
+<span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a>mrm_template_list <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="fu">system.file</span>(<span class="st">&quot;extdata&quot;</span>, <span class="st">&quot;LGW_lipid_mrm_template_v1.tsv&quot;</span>, <span class="at">package =</span> <span class="st">&quot;MStargetR&quot;</span>))</span>
 <span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a></span>
 <span id="cb6-7"><a href="#cb6-7" tabindex="-1"></a><span class="fu">PeakForgeR</span>(</span>
 <span id="cb6-8"><a href="#cb6-8" tabindex="-1"></a>  <span class="at">user_name =</span> <span class="st">&quot;User&quot;</span>,</span>
@@ -469,7 +469,7 @@ follows:</p>
 <p>The output of <code>PeakForgeR</code> is a CSV file containing the
 integrated peak information for each sample and molecule. Let’s look at
 the example report provided in the package.</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a>peakforger_report_path <span class="ot">&lt;-</span> <span class="fu">system.file</span>(<span class="st">&quot;extdata&quot;</span>, <span class="st">&quot;Example_PeakForgeR_report.csv&quot;</span>, <span class="at">package =</span> <span class="st">&quot;MetaboExploreR&quot;</span>)</span>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a>peakforger_report_path <span class="ot">&lt;-</span> <span class="fu">system.file</span>(<span class="st">&quot;extdata&quot;</span>, <span class="st">&quot;Example_PeakForgeR_report.csv&quot;</span>, <span class="at">package =</span> <span class="st">&quot;MStargetR&quot;</span>)</span>
 <span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a>peakforger_report <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(peakforger_report_path, <span class="at">check.names =</span> <span class="cn">FALSE</span>)</span>
 <span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a><span class="fu">head</span>(peakforger_report)</span>
 <span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a><span class="co">#&gt;     FileName MoleculeListName MoleculeName PrecursorMz ProductMz RetentionTime</span></span>
@@ -495,28 +495,28 @@ takes the output from <code>PeakForgeR</code> and generates various
 plots and reports to assess the quality of the data.</p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a><span class="co"># In a real analysis, you would use the project directory where the PeakForgeR output is located.</span></span>
 <span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a><span class="co"># qcCheckR can handle tsv and csv data inputs</span></span>
-<span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a><span class="co"># See documentation ??MetaboExploreR::qcCheckR for further information.</span></span>
+<span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a><span class="co"># See documentation ??MStargetR::qcCheckR for further information.</span></span>
 <span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a></span>
-<span id="cb8-5"><a href="#cb8-5" tabindex="-1"></a><span class="fu">library</span>(MetaboExploreR)</span>
+<span id="cb8-5"><a href="#cb8-5" tabindex="-1"></a><span class="fu">library</span>(MStargetR)</span>
 <span id="cb8-6"><a href="#cb8-6" tabindex="-1"></a></span>
 <span id="cb8-7"><a href="#cb8-7" tabindex="-1"></a><span class="co">#Load example mrm_template_list</span></span>
 <span id="cb8-8"><a href="#cb8-8" tabindex="-1"></a>  file_path <span class="ot">&lt;-</span> <span class="fu">system.file</span>(<span class="st">&quot;extdata&quot;</span>,</span>
 <span id="cb8-9"><a href="#cb8-9" tabindex="-1"></a>                           <span class="st">&quot;LGW_lipid_mrm_template_v1.tsv&quot;</span>,</span>
-<span id="cb8-10"><a href="#cb8-10" tabindex="-1"></a>                           <span class="at">package =</span> <span class="st">&quot;MetaboExploreR&quot;</span>)</span>
+<span id="cb8-10"><a href="#cb8-10" tabindex="-1"></a>                           <span class="at">package =</span> <span class="st">&quot;MStargetR&quot;</span>)</span>
 <span id="cb8-11"><a href="#cb8-11" tabindex="-1"></a></span>
 <span id="cb8-12"><a href="#cb8-12" tabindex="-1"></a>  sample_metadata_example <span class="ot">&lt;-</span> <span class="fu">read_tsv</span>(file_path)</span>
 <span id="cb8-13"><a href="#cb8-13" tabindex="-1"></a></span>
 <span id="cb8-14"><a href="#cb8-14" tabindex="-1"></a><span class="co">#Load example conc_guide</span></span>
 <span id="cb8-15"><a href="#cb8-15" tabindex="-1"></a>  file_path <span class="ot">&lt;-</span> <span class="fu">system.file</span>(<span class="st">&quot;extdata&quot;</span>,</span>
 <span id="cb8-16"><a href="#cb8-16" tabindex="-1"></a>                           <span class="st">&quot;LGW_SIL_batch_Ultimate_2023_03_06.tsv&quot;</span>,</span>
-<span id="cb8-17"><a href="#cb8-17" tabindex="-1"></a>                           <span class="at">package =</span> <span class="st">&quot;MetaboExploreR&quot;</span>)</span>
+<span id="cb8-17"><a href="#cb8-17" tabindex="-1"></a>                           <span class="at">package =</span> <span class="st">&quot;MStargetR&quot;</span>)</span>
 <span id="cb8-18"><a href="#cb8-18" tabindex="-1"></a></span>
 <span id="cb8-19"><a href="#cb8-19" tabindex="-1"></a>  sample_metadata_example <span class="ot">&lt;-</span> <span class="fu">read_tsv</span>(file_path)</span>
 <span id="cb8-20"><a href="#cb8-20" tabindex="-1"></a></span>
 <span id="cb8-21"><a href="#cb8-21" tabindex="-1"></a><span class="co">#Load example report file</span></span>
 <span id="cb8-22"><a href="#cb8-22" tabindex="-1"></a>  file_path <span class="ot">&lt;-</span> <span class="fu">system.file</span>(<span class="st">&quot;extdata&quot;</span>,</span>
 <span id="cb8-23"><a href="#cb8-23" tabindex="-1"></a>                           <span class="st">&quot;Example_PeakForgeR_report.csv&quot;</span>,</span>
-<span id="cb8-24"><a href="#cb8-24" tabindex="-1"></a>                           <span class="at">package =</span> <span class="st">&quot;MetaboExploreR&quot;</span>)</span>
+<span id="cb8-24"><a href="#cb8-24" tabindex="-1"></a>                           <span class="at">package =</span> <span class="st">&quot;MStargetR&quot;</span>)</span>
 <span id="cb8-25"><a href="#cb8-25" tabindex="-1"></a></span>
 <span id="cb8-26"><a href="#cb8-26" tabindex="-1"></a>  report_file <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(file_path)</span>
 <span id="cb8-27"><a href="#cb8-27" tabindex="-1"></a></span>
@@ -547,7 +547,7 @@ functions:</p>
 ensure all transitions are unique. Please use the below example to test
 it out!</li>
 </ol>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a>mrm_template_path <span class="ot">&lt;-</span> <span class="fu">system.file</span>(<span class="st">&quot;extdata&quot;</span>, <span class="st">&quot;LGW_lipid_mrm_template_v1.tsv&quot;</span>, <span class="at">package =</span> <span class="st">&quot;MetaboExploreR&quot;</span>)</span>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a>mrm_template_path <span class="ot">&lt;-</span> <span class="fu">system.file</span>(<span class="st">&quot;extdata&quot;</span>, <span class="st">&quot;LGW_lipid_mrm_template_v1.tsv&quot;</span>, <span class="at">package =</span> <span class="st">&quot;MStargetR&quot;</span>)</span>
 <span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a>mrm_template_df <span class="ot">&lt;-</span> <span class="fu">read.delim</span>(mrm_template_path, <span class="at">check.names =</span> <span class="cn">FALSE</span>)</span>
 <span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a><span class="fu">head</span>(mrm_template_df)</span>
 <span id="cb9-4"><a href="#cb9-4" tabindex="-1"></a></span>
@@ -559,11 +559,11 @@ standards from the <code>Note</code> column in the transition list has a
 match in <code>SIL_name</code> of the concentration guide. Please use
 the below example to test it out!</li>
 </ol>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a>mrm_template_path <span class="ot">&lt;-</span> <span class="fu">system.file</span>(<span class="st">&quot;extdata&quot;</span>, <span class="st">&quot;LGW_lipid_mrm_template_v1.tsv&quot;</span>, <span class="at">package =</span> <span class="st">&quot;MetaboExploreR&quot;</span>)</span>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a>mrm_template_path <span class="ot">&lt;-</span> <span class="fu">system.file</span>(<span class="st">&quot;extdata&quot;</span>, <span class="st">&quot;LGW_lipid_mrm_template_v1.tsv&quot;</span>, <span class="at">package =</span> <span class="st">&quot;MStargetR&quot;</span>)</span>
 <span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a>  mrm_template_df <span class="ot">&lt;-</span> <span class="fu">read.delim</span>(mrm_template_path, <span class="at">check.names =</span> <span class="cn">FALSE</span>)</span>
 <span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a>  <span class="fu">head</span>(mrm_template_df)</span>
 <span id="cb10-4"><a href="#cb10-4" tabindex="-1"></a></span>
-<span id="cb10-5"><a href="#cb10-5" tabindex="-1"></a>conc_guide_path <span class="ot">&lt;-</span> <span class="fu">system.file</span>(<span class="st">&quot;extdata&quot;</span>,<span class="st">&quot;LGW_SIL_batch_103.tsv&quot;</span>, <span class="at">package =</span> <span class="st">&quot;MetaboExploreR&quot;</span>)</span>
+<span id="cb10-5"><a href="#cb10-5" tabindex="-1"></a>conc_guide_path <span class="ot">&lt;-</span> <span class="fu">system.file</span>(<span class="st">&quot;extdata&quot;</span>,<span class="st">&quot;LGW_SIL_batch_103.tsv&quot;</span>, <span class="at">package =</span> <span class="st">&quot;MStargetR&quot;</span>)</span>
 <span id="cb10-6"><a href="#cb10-6" tabindex="-1"></a>  conc_guide_df <span class="ot">&lt;-</span> <span class="fu">read.delim</span>(conc_guide_path, <span class="at">check.names =</span> <span class="cn">FALSE</span>)</span>
 <span id="cb10-7"><a href="#cb10-7" tabindex="-1"></a>  <span class="fu">head</span>(conc_guide_df)</span>
 <span id="cb10-8"><a href="#cb10-8" tabindex="-1"></a></span>
@@ -572,7 +572,7 @@ the below example to test it out!</li>
 </div>
 <div id="multi-method-project-setup" class="section level1">
 <h1>Multi Method Project Setup</h1>
-<p>Previously, we demonstrated how to set up MetaboExploreR for a single
+<p>Previously, we demonstrated how to set up MStargetR for a single
 method. However, the package also supports multi method analysis
 provided that a consistent long-term reference material (LTR) has been
 used across all methods To enable this functionality, users must supply

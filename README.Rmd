@@ -1,5 +1,5 @@
 ---
-title: "MetaboExploreR <img src='man/figures/logo.png' style='float: right; height:50px;' />"
+title: "MStargetR <img src='man/figures/logo.png' style='float: right; height:50px;' />"
 output: github_document
 ---
 
@@ -9,7 +9,7 @@ output: github_document
 
 ## Overview
 
-MetaboExploreR provides a pipeline for processing and quality control of targeted 
+MStargetR provides a pipeline for processing and quality control of targeted 
 mass spectrometry vendor files to concentration outputs ready for further analysis.
 The package allows for cross platform usage through Docker.
 
@@ -30,20 +30,20 @@ Performs quality control, batch/signal drift correction, and generates analytica
 
 ## Installation
 **`Docker Desktop`**
-Users are required to install Docker in order to run MetaboExploreR::msConvertR and MetaboExploreR::PeakForgeR.  
+Users are required to install Docker in order to run MStargetR::msConvertR and MStargetR::PeakForgeR.  
 Please visit https://www.docker.com/get-started/ for installation process.
 
-Note: Please ensure Docker Application is running in the background when using MetaboExploreR if you are using a Mac or Windows OS.
+Note: Please ensure Docker Application is running in the background when using MStargetR if you are using a Mac or Windows OS.
 
-**`MetaboExploreR`**
+**`MStargetR`**
 Installation is effortless with the below helper function.
 Once the package is attached you will be asked for a username and a default
 default workflow will open for your convenience.
 ``` r
-source("https://raw.githubusercontent.com/Hszemray/MetaboExploreR/master/R/install.R")
-install_MetaboExploreR()
-rm(install_MetaboExploreR)
-library(MetaboExploreR)
+source("https://raw.githubusercontent.com/Hszemray/MStargetR/master/R/install.R")
+install_MStargetR()
+rm(install_MStargetR)
+library(MStargetR)
 ```
     
 ## Project Setup 
@@ -95,7 +95,7 @@ Process iterates by plate to:
 Post-execution directory of msConvertR, PeakForgeR, and qcCheckR:
 
     User Project Directory
-    ├── Archive #Archive of wiff files and MetaboExploreR logs by plate
+    ├── Archive #Archive of wiff files and MStargetR logs by plate
     ├── ALL
     │   ├── data
     │   │   ├── batch_correction # batch  and singnal drift correction outputs
@@ -130,7 +130,7 @@ For a more detailed guide please visit the following link [here][user-guide]
 ## Support
 
 For technical assistance, please open an issue at:  
-<https://github.com/Hszemray/MetaboExploreR>
+<https://github.com/Hszemray/MStargetR>
 
 ## License
 Please refer to license information [here][license]
@@ -138,7 +138,7 @@ Please refer to license information [here][license]
 ## Citation
 If you use this software in your work, please cite it using the following metadata:
 
-Szemray, H., Nambiar, V., Lawler, N., Lodge, S., Wist, J.,&  Whiley, L. (2025). MetaboExploreR (Version 1.0.0) [Computer software]. Zenodo.(zenodo link)
+Szemray, H., Nambiar, V., Lawler, N., Lodge, S., Wist, J.,&  Whiley, L. (2025). MStargetR (Version 1.0.0) [Computer software]. Zenodo.(zenodo link)
 
 <!-- Links -->
 [license]: LICENSE
@@ -147,4 +147,4 @@ Szemray, H., Nambiar, V., Lawler, N., Lodge, S., Wist, J.,&  Whiley, L. (2025). 
 [semantic-release-badge]: https://img.shields.io/badge/semantic--release-angular-E10079.svg?logo=semantic-release&logoColor=%23E10079
 [doi-zenodo]: https://doi.org/10.5281/zenodo.10976761
 [doi-zenodo-badge]: https://img.shields.io/badge/zenodo-10.5281/zenodo.10976761-blue.svg?logo=doi&logoColor=blue
-[user-guide]: https://Hszemray.github.io/MetaboExploreR/MetaboExploreR-vignette.html
+[user-guide]: https://Hszemray.github.io/MStargetR/MStargetR-vignette.html

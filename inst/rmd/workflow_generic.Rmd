@@ -1,5 +1,5 @@
 ---
-title: "MetaboExploreR Generic Workflow"
+title: "MStargetR Generic Workflow"
 author: "Harrison Szemray"
 date: "`r Sys.Date()`"
 output: 
@@ -18,13 +18,13 @@ project_path <- "USER/PATH/TO/PROJECT" # Please define path to project file
 qc_label <- "QC"   # Please replace with your QC tag 
 
 message("Step 1: Converting raw vendor files to mzml...")
-MetaboExploreR::msConvertR(
+MStargetR::msConvertR(
   input_directory  = project_path,
   output_directory = project_path
 )
 
 message("Step 2: Running PeakForgeR...")
-MetaboExploreR::PeakForgeR(
+MStargetR::PeakForgeR(
   user_name = user_name,
   project_directory = project_path,
   mrm_template_list = "path/to/mrm_guide1.tsv",
@@ -33,7 +33,7 @@ MetaboExploreR::PeakForgeR(
 )
 
 message("Step 3: Running QC check...")
-MetaboExploreR::qcCheckR(
+MStargetR::qcCheckR(
   user_name = user_name,
   project_directory = project_path,
   mrm_template_list = list(

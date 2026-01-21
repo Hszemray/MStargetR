@@ -1,6 +1,6 @@
 cff-version: 1.2.0
 message: If you use this software in your work, please cite it using the following metadata.
-title: MetaboExploreR
+title: MStargetR
 version: 1.0.0
 abstract: An R package to convert vendor files to ready to use concentration data.
 keywords:
@@ -10,8 +10,8 @@ keywords:
   - quality control
   - software package
 type: software
-url: https://github.com/Hszemray/MetaboExploreR#readme
-repository-code: https://github.com/Hszemray/MetaboExploreR
+url: https://github.com/Hszemray/MStargetR#readme
+repository-code: https://github.com/Hszemray/MStargetR
 license: MIT
 authors:
   - given-names: Harrison

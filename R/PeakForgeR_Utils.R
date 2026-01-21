@@ -1151,7 +1151,7 @@ export_files <- function(master_list, plate_idx) {
   )
 
   file.copy(
-    from = system.file("templates", "default_skyline_file.sky", package = "MetaboExploreR"),
+    from = system.file("templates", "default_skyline_file.sky", package = "MStargetR"),
     to = paste0(PeakForgeR_path)
   )
 
@@ -1160,7 +1160,7 @@ export_files <- function(master_list, plate_idx) {
     to = file.path(PeakForgeR_path, paste0(Sys.Date(), "_", plate_idx, ".sky"))
   )
   file.copy(
-    from = system.file("templates", "default_csv.csv", package = "MetaboExploreR"),
+    from = system.file("templates", "default_csv.csv", package = "MStargetR"),
     to = file.path(PeakForgeR_path)
   )
 
@@ -1172,7 +1172,7 @@ export_files <- function(master_list, plate_idx) {
     )
   )
   file.copy(
-    from = system.file("templates", "default_tsv.tsv", package = "MetaboExploreR"),
+    from = system.file("templates", "default_tsv.tsv", package = "MStargetR"),
     to = file.path(PeakForgeR_path)
   )
 
@@ -1187,7 +1187,7 @@ export_files <- function(master_list, plate_idx) {
     from = system.file(
       "templates",
       "YYYY-MM-DD_PeakForgeR_project_name.skyr",
-      package = "MetaboExploreR"
+      package = "MStargetR"
     ),
     to = file.path(PeakForgeR_path)
   )
@@ -1477,7 +1477,7 @@ save_plate_data <- function(master_list, plate_idx) {
 #' }
 archive_raw_files <- function(project_directory) {
   validate_project_directory(project_directory)
-  archive_files(project_directory, "MetaboExploreR_logs")
+  archive_files(project_directory, "MStargetR_logs")
   archive_files(project_directory, "raw_data")
   #archive_files(project_directory, "msConvert_mzml_output")
   message("\n PeakForgeR is now finished running all plates :)")

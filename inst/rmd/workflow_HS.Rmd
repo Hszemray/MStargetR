@@ -1,5 +1,5 @@
 ---
-title: "MetaboExploreR CCSM Workflow"
+title: "MStargetR CCSM Workflow"
 author: "Harrison Szemray"
 date: "`r Sys.Date()`"
 output: 
@@ -16,13 +16,13 @@ qc_label <- "LTR"   # Options: LTR, PQC, VLTR, etc.
 missing_val_threshold <- 50 #default for ANPC methods
 
 message("Step 1: Converting raw vendor files to mzml...")
-MetaboExploreR::msConvertR(
+MStargetR::msConvertR(
   input_directory  = project_path,
   output_directory = project_path
 )
 
 message("Step 2: Running PeakForgeR...")
-MetaboExploreR::PeakForgeR(
+MStargetR::PeakForgeR(
   user_name = "ANPC",
   project_directory = project_path,
   mrm_template_list = NULL,
@@ -31,7 +31,7 @@ MetaboExploreR::PeakForgeR(
 )
 
 message("Step 3: Running QC check...")
-MetaboExploreR::qcCheckR(
+MStargetR::qcCheckR(
   user_name = "ANPC",
   project_directory = project_path,
   mrm_template_list = NULL,
@@ -58,13 +58,13 @@ for (config in project_configs) {
   missing_val_threshold <- config$missing_val_threshold
 
   message("Step 1: Converting raw vendor files to mzml...")
-  MetaboExploreR::msConvertR(
+  MStargetR::msConvertR(
     input_directory  = project_path,
     output_directory = project_path
   )
 
   message("Step 2: Running PeakForgeR...")
-  MetaboExploreR::PeakForgeR(
+  MStargetR::PeakForgeR(
     user_name = "ANPC",
     project_directory = project_path,
     mrm_template_list = NULL,
@@ -73,7 +73,7 @@ for (config in project_configs) {
   )
 
   message("Step 3: Running QC check...")
-  MetaboExploreR::qcCheckR(
+  MStargetR::qcCheckR(
     user_name = "ANPC",
     project_directory = project_path,
     mrm_template_list = NULL,

@@ -245,9 +245,9 @@ validate_mrm_template_list <- function(mrm_template_list, user_name) {
   if (user_name == "ANPC") {
     if (is.null(mrm_template_list)) {
       mrm_template_list <- list(
-        v1 = system.file("extdata", "LGW_lipid_mrm_template_v1.tsv", package = "MetaboExploreR"),
-        v2 = system.file("extdata", "LGW_lipid_mrm_template_v2.tsv", package = "MetaboExploreR"),
-        v4 = system.file("extdata", "LGW_lipid_mrm_template_v4.tsv", package = "MetaboExploreR")
+        v1 = system.file("extdata", "LGW_lipid_mrm_template_v1.tsv", package = "MStargetR"),
+        v2 = system.file("extdata", "LGW_lipid_mrm_template_v2.tsv", package = "MStargetR"),
+        v4 = system.file("extdata", "LGW_lipid_mrm_template_v4.tsv", package = "MStargetR")
       )
       message("mrm_template validation complete")
       return(mrm_template_list)
@@ -302,7 +302,7 @@ validate_mrm_template_list <- function(mrm_template_list, user_name) {
 #' log_error("An error occurred while processing the data.")
 #' }
 log_error <- function(error_message, plateID) {
-  log_file <- file.path(project_directory, "MetaboExploreR_logs", paste0(plateID, "_MetaboExploreR_log.txt"))
+  log_file <- file.path(project_directory, "MStargetR_logs", paste0(plateID, "_MStargetR_log.txt"))
   write(error_message, file = log_file, append = TRUE)
 }
 

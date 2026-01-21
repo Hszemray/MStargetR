@@ -1,5 +1,5 @@
 bibentry(
-  title = "MetaboExploreR",
+  title = "MStargetR",
   version = "1.0.0",
   abstract = "An R package to to explore targeted MRM mass spectrometry data",
   keywords = c(
@@ -10,8 +10,8 @@ bibentry(
     "software package"
   ),
   bibtype = "Manual",
-  url = "https://github.com/Hszemray/MetaboExploreR#readme",
-  repository = "https://github.com/Hszemray/MetaboExploreR",
+  url = "https://github.com/Hszemray/MStargetR#readme",
+  repository = "https://github.com/Hszemray/MStargetR",
   license = "MIT",
   author = c(
     person(

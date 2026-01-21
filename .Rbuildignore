@@ -34,7 +34,7 @@
 
 # Resources
 ^scripts$
-^vignettes/MetaboExploreR-vignette\\.R$
-^vignettes/MetaboExploreR-vignette\\.html$
+^vignettes/MStargetR-vignette\\.R$
+^vignettes/MStargetR-vignette\\.html$
 ^doc$
 ^Meta$

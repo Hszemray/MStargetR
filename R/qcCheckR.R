@@ -6,7 +6,7 @@
 #' To allow this feature all methods must be included in the mrm_template_list.
 #' Please note only matching metabolite feature names across cohorts/methods will be processed.
 #'
-#' If you have not used the MetaboExploreR::PeakForgeR function to generate reports please ensure your report file names contains ""_PeakForgeR_"" to ensure the function can correctly identify the files in your project directory.
+#' If you have not used the MStargetR::PeakForgeR function to generate reports please ensure your report file names contains ""_PeakForgeR_"" to ensure the function can correctly identify the files in your project directory.
 #'
 #' @param project_directory A character string specifying the path to the project directory.
 #' @param mrm_template_list A list of MRM templates and associated concentration guide. Must have specific column names. See examples for structure of mrm_template_list. Must include mrm_guide labelled as "SIL_guide" and associated concentration guide labelled as "conc_guide". Can contain multiple combinations stored as separate lists, see examples.
@@ -19,26 +19,26 @@
 #' @examples
 #' \dontrun{
 #'
-#' library(MetaboExploreR)
+#' library(MStargetR)
 #'
 #' #Load example mrm_template_list
 #'   file_path <- system.file("extdata",
 #'                            "LGW_lipid_mrm_template_v1.tsv",
-#'                            package = "MetaboExploreR")
+#'                            package = "MStargetR")
 #'
 #'   sample_metadata_example <- read_tsv(file_path)
 #'
 #' #Load example conc_guide
 #'   file_path <- system.file("extdata",
 #'                            "LGW_SIL_batch_Ultimate_2023_03_06.tsv",
-#'                            package = "MetaboExploreR")
+#'                            package = "MStargetR")
 #'
 #'   sample_metadata_example <- read_tsv(file_path)
 #'
 #' #Load example report file
 #'   file_path <- system.file("extdata",
 #'                            "Example_xskylineR_report.csv",
-#'                            package = "MetaboExploreR")
+#'                            package = "MStargetR")
 #'
 #'   report_file <- read.csv(file_path)
 #'

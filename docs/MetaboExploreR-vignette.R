@@ -5,11 +5,11 @@ knitr::opts_chunk$set(
 )
 
 ## ----install assistant, eval=FALSE--------------------------------------------
-# source("https://raw.githubusercontent.com/Hszemray/MetaboExploreR/master/R/install.R")
-# install_MetaboExploreR()
+# source("https://raw.githubusercontent.com/Hszemray/MStargetR/master/R/install.R")
+# install_MStargetR()
 
 ## ----load_library, eval=FALSE-------------------------------------------------
-# library(MetaboExploreR)
+# library(MStargetR)
 
 ## ----project_setup, eval=FALSE------------------------------------------------
 # # Create a temporary directory for the project
@@ -26,7 +26,7 @@ knitr::opts_chunk$set(
 # msConvertR(input_directory = project_dir, output_directory = project_dir)
 
 ## ----mrm_example--------------------------------------------------------------
-mrm_template_path <- system.file("extdata", "LGW_lipid_mrm_template_v1.tsv", package = "MetaboExploreR")
+mrm_template_path <- system.file("extdata", "LGW_lipid_mrm_template_v1.tsv", package = "MStargetR")
 mrm_template <- read.delim(mrm_template_path)
 head(mrm_template)
 
@@ -35,7 +35,7 @@ head(mrm_template)
 # project_directory <- "path/to/your/project"
 # 
 # # List of MRM template files
-# mrm_template_list <- list(system.file("extdata", "LGW_lipid_mrm_template_v1.tsv", package = "MetaboExploreR"))
+# mrm_template_list <- list(system.file("extdata", "LGW_lipid_mrm_template_v1.tsv", package = "MStargetR"))
 # 
 # PeakForgeR(
 #   user_name = "User",
@@ -46,35 +46,35 @@ head(mrm_template)
 # )
 
 ## ----PeakForgeR_output_example------------------------------------------------
-peakforger_report_path <- system.file("extdata", "Example_PeakForgeR_report.csv", package = "MetaboExploreR")
+peakforger_report_path <- system.file("extdata", "Example_PeakForgeR_report.csv", package = "MStargetR")
 peakforger_report <- read.csv(peakforger_report_path, check.names = FALSE)
 head(peakforger_report)
 
 ## ----qcCheckR, eval=FALSE-----------------------------------------------------
 # # In a real analysis, you would use the project directory where the PeakForgeR output is located.
 # # qcCheckR can handle tsv and csv data inputs
-# # See documentation ??MetaboExploreR::qcCheckR for further information.
+# # See documentation ??MStargetR::qcCheckR for further information.
 # 
-# library(MetaboExploreR)
+# library(MStargetR)
 # 
 # #Load example mrm_template_list
 #   file_path <- system.file("extdata",
 #                            "LGW_lipid_mrm_template_v1.tsv",
-#                            package = "MetaboExploreR")
+#                            package = "MStargetR")
 # 
 #   sample_metadata_example <- read_tsv(file_path)
 # 
 # #Load example conc_guide
 #   file_path <- system.file("extdata",
 #                            "LGW_SIL_batch_Ultimate_2023_03_06.tsv",
-#                            package = "MetaboExploreR")
+#                            package = "MStargetR")
 # 
 #   sample_metadata_example <- read_tsv(file_path)
 # 
 # #Load example report file
 #   file_path <- system.file("extdata",
 #                            "Example_PeakForgeR_report.csv",
-#                            package = "MetaboExploreR")
+#                            package = "MStargetR")
 # 
 #   report_file <- read_csv(file_path)
 # 
@@ -90,7 +90,7 @@ head(peakforger_report)
 #          mv_threshold = 0.5) #default is  0.5 for 50\% missing values
 
 ## ----transition_checkR, eval= FALSE-------------------------------------------
-# mrm_template_path <- system.file("extdata", "LGW_lipid_mrm_template_v1.tsv", package = "MetaboExploreR")
+# mrm_template_path <- system.file("extdata", "LGW_lipid_mrm_template_v1.tsv", package = "MStargetR")
 # mrm_template_df <- read.delim(mrm_template_path, check.names = FALSE)
 # head(mrm_template_df)
 # 
@@ -98,11 +98,11 @@ head(peakforger_report)
 # transition_checkR(mrm_template_df)
 
 ## ----compare_mrm_template_with_guide, eval = FALSE----------------------------
-# mrm_template_path <- system.file("extdata", "LGW_lipid_mrm_template_v1.tsv", package = "MetaboExploreR")
+# mrm_template_path <- system.file("extdata", "LGW_lipid_mrm_template_v1.tsv", package = "MStargetR")
 #   mrm_template_df <- read.delim(mrm_template_path, check.names = FALSE)
 #   head(mrm_template_df)
 # 
-# conc_guide_path <- system.file("extdata","LGW_SIL_batch_103.tsv", package = "MetaboExploreR")
+# conc_guide_path <- system.file("extdata","LGW_SIL_batch_103.tsv", package = "MStargetR")
 #   conc_guide_df <- read.delim(conc_guide_path, check.names = FALSE)
 #   head(conc_guide_df)
 # 

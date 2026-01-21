@@ -4,10 +4,10 @@
 \alias{msConvertR_execute_command}
 \title{msConvertR_execute_command}
 \usage{
-msConvertR_execute_command(command)
+msConvertR_execute_command(commands, output_directory, plateIDs)
 }
 \arguments{
-\item{command}{The command string to execute.}
+\item{commands}{The command string to execute for each plate.}
 }
 \value{
 None. The function executes the command.
