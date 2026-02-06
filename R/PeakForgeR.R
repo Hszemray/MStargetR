@@ -1,5 +1,5 @@
 #'PeakForgeR
-#'
+#' @name PeakForgeR
 #' @description This function performs peak picking and integration via Skyline
 #' in a Docker image. Allowing for usage across all major OS systems.
 #'
@@ -80,6 +80,8 @@
 #'    \item Message about availability of chromatograms and reports
 #'   }
 #' }
+NULL
+
 #' Import specific functions from packages
 #' @keywords internal
 #' @name PeakForgeR_import_external_functions
