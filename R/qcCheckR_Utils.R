@@ -696,7 +696,7 @@ assess_qc_coverage <- function(master_list) {
       total <- nrow(plate_data)
       count <- sum(tolower(plate_data$sample_type) == tolower(qc))
       ratio <- count / total
-      status <- if (ratio < 8 / 120 || count < 2)
+      status <- if (ratio < 8 / 125 || count < 2)
         "fail"
       else
         "pass"
@@ -712,7 +712,8 @@ assess_qc_coverage <- function(master_list) {
       }
     }
   }
-
+  print(master_list$project_details$global_qc_pass)
+  print(master_list$project_details$qc_passed)
   return(master_list)
 }
 
@@ -1564,6 +1565,8 @@ qcCheckR_set_qc <- function(master_list) {
       plate_qc_passed = master_list$project_details$qc_passed
     )
   } else {
+    print(master_list$project_details$global_qc_pass)
+    print(master_list$project_details$qc_passed)
     notify_qc_type(qc_type)
   }
 
